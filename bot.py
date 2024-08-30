@@ -1,5 +1,6 @@
 import asyncio
 from pyrogram import Client, filters
+from datetime import datetime, timedelta
 from pyrogram.types import Message
 from pyrogram.errors import ChatAdminRequired
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
@@ -150,11 +151,15 @@ async def handle_bkl(client: Client, message: Message):
             await message.reply("Please reply to a text message to create a quote.")
 
 
-# Define the /chuplawde command
+from datetime import datetime, timedelta
+from pyrogram import Client, filters
+from pyrogram.errors import ChatAdminRequired
+
+# Define the /chuplawde command to ban a user
 @app.on_message(filters.command("chuplawde") & filters.group)
-async def mute_member(client: Client, message: Message):
+async def ban_member(client: Client, message: Message):
     if not message.reply_to_message:
-        await message.reply("Please reply to a message from the user you want to mute.")
+        await message.reply("Please reply to a message from the user you want to ban.")
         return
 
     # Check if the command issuer has admin rights
@@ -166,28 +171,20 @@ async def mute_member(client: Client, message: Message):
     target_user = message.reply_to_message.from_user
 
     try:
-        # Restrict the user (mute them) in the chat
-        await client.restrict_chat_member(
+        # Ban the user (this will remove them and prevent them from rejoining)
+        await client.ban_chat_member(
             chat_id=message.chat.id,
-            user_id=target_user.id,
-            permissions={
-                "can_send_messages": False,
-                "can_send_media_messages": False,
-                "can_send_polls": False,
-                "can_send_other_messages": False,
-                "can_add_web_page_previews": False,
-                "can_change_info": False,
-                "can_invite_users": False,
-                "can_pin_messages": False
-            }
+            user_id=target_user.id
         )
-        await message.reply(f"User {target_user.mention} has been muted.")
+        await message.reply(f"User {target_user.mention} has been banned.")
     except ChatAdminRequired:
-        await message.reply("I need admin rights to mute users.")
+        await message.reply("I need admin rights to ban users.")
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
-                    
-        
+
+# Start the bot
+app.run()
+
             
 # Start the bot
 app.run()
