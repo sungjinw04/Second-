@@ -1,7 +1,7 @@
 import asyncio
 from pyrogram import Client, filters
-from datetime import datetime, timedelta
-from pyrogram.types import Message
+from datetime import datetime
+from pyrogram.types import Message, UserNotParticipant
 from pyrogram.errors import ChatAdminRequired
 from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from motor.motor_asyncio import AsyncIOMotorClient
@@ -163,27 +163,28 @@ async def ban_member(client: Client, message: Message):
         return
 
     # Check if the command issuer has admin rights
-    chat_member = await client.get_chat_member(message.chat.id, message.from_user.id)
-    if chat_member.status not in ["administrator", "creator"]:
-        await message.reply("You need to be an admin to use this command.")
-        return
-
-    target_user = message.reply_to_message.from_user
-
     try:
+        chat_member = await client.get_chat_member(message.chat.id, message.from_user.id)
+        if chat_member.status not in ["administrator", "creator"]:
+            await message.reply("You need to be an admin to use this command.")
+            return
+
+        target_user = message.reply_to_message.from_user
+
         # Ban the user (this will remove them and prevent them from rejoining)
         await client.ban_chat_member(
             chat_id=message.chat.id,
             user_id=target_user.id
         )
         await message.reply(f"User {target_user.mention} has been banned.")
+    
     except ChatAdminRequired:
         await message.reply("I need admin rights to ban users.")
+    except UserNotParticipant:
+        await message.reply("The user is not a participant in this chat.")
     except Exception as e:
         await message.reply(f"An error occurred: {e}")
 
-# Start the bot
-app.run()
 
             
 # Start the bot
