@@ -510,17 +510,7 @@ async def quott_(event):
         else:
             match = match[0]
     if match == "random":
-        match = choice(all_col)
-    try:
-        file = await quotly.create_quotly(
-            reply_, bg=match, reply=replied_to, sender=user
-        )
-    except Exception as er:
-        return await msg.edit(str(er))
-    message = await reply.reply("", file=file)
-    os.remove(file)
-    await msg.delete()
-    return message
+
         
             
 # Start the bot
