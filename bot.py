@@ -283,7 +283,7 @@ class Quotly:
         OQAPI=True,
         file_name="quote.webp",
     ):
-        """Create quotely's quote."""
+        
         if not isinstance(event, list):
             event = [event]
         if OQAPI:
