@@ -58,28 +58,22 @@ async def handle_message(client: Client, message: Message):
     else:
         await log_user_changes(user_id, username, name)
 
-# Command handler to fetch change history
-@app.on_message def non_command_filter(rape):
-    return not message.text.startswith('/')
-filters.create(non_command_filter)
-async def handle_rape_command(client: Client, message: Message):
-    user_id = message.from_user.id
-    
-    # Debugging: Check if the command was detected
-    await message.reply("Processing the /rape command...")
+# Non-filter command handling
+    if message.text and message.text.startswith("/rape"):
+        user_id = message.from_user.id
+        await message.reply("Processing the /rape command...")
 
-    # Fetch user data
-    user_data = await collection.find_one({"user_id": user_id})
-    
-    if not user_data or "change_history" not in user_data:
-        await message.reply("No changes recorded for this user.")
-    else:
-        history = user_data["change_history"]
-        response = f"Change history for {user_data.get('name')}:\n\n"
-        for change in history:
-            response += f"Name: {change.get('name')} | Username: {change.get('username')} | Modified At: {change.get('modified_at').strftime('%Y-%m-%d %H:%M:%S')} UTC\n"
-        await message.reply(response)
+        # Fetch user data
+        user_data = await collection.find_one({"user_id": user_id})
+        
+        if not user_data or "change_history" not in user_data:
+            await message.reply("No changes recorded for this user.")
+        else:
+            history = user_data["change_history"]
+            response = f"Change history for {user_data.get('name')}:\n\n"
+            for change in history:
+                response += f"Name: {change.get('name')} | Username: {change.get('username')} | Modified At: {change.get('modified_at').strftime('%Y-%m-%d %H:%M:%S')} UTC\n"
+            await message.reply(response)
 
 # Start the bot
 app.run()
-
