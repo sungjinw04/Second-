@@ -1,7 +1,7 @@
 import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message
-from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup, InputMediaPhoto
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime
 
@@ -44,24 +44,26 @@ async def log_user_changes(user_id, username, name):
 # Command handler for /start
 @app.on_message(filters.command("start") & filters.private)
 async def start(client: Client, message: Message):
+    # Send an image first
+    await message.reply_photo(
+        "https://telegra.ph//file/919714d04904fae43ffd0.jpg"
+    )
+    
     # Welcome message
     welcome_text = "Welcome to the bot! Please choose an option below:"
     
-    # Inline keyboard with buttons
+    # Inline keyboard with buttons arranged vertically
     keyboard = InlineKeyboardMarkup(
         [
-            [
-                InlineKeyboardButton("My Master", url="http://t.me/sung_jinwo4"),
-                InlineKeyboardButton("Support", url="http://t.me/beyondlimit7"),
-                InlineKeyboardButton("Support", url="http://t.me/souls_bornx"),
-                InlineKeyboardButton("Support", url="http://t.me/about_jinwoo"),
-            ]
+            [InlineKeyboardButton("My Master", url="http://t.me/sung_jinwo4")],
+            [InlineKeyboardButton("Support", url="http://t.me/beyondlimit7")],
+            [InlineKeyboardButton("Destroyer", url="http://t.me/souls_borns")],
+            [InlineKeyboardButton("Network", url="http://t.me/soul_networks")],
         ]
     )
     
     # Sending the message with the inline keyboard
     await message.reply(welcome_text, reply_markup=keyboard)
-
 # Event handler for new messages
 @app.on_message(filters.group)
 async def handle_message(client: Client, message: Message):
