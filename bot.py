@@ -1,6 +1,7 @@
 import asyncio
 from pyrogram import Client, filters
 from pyrogram.types import Message
+from pyrogram.types import Message, InlineKeyboardButton, InlineKeyboardMarkup
 from motor.motor_asyncio import AsyncIOMotorClient
 from datetime import datetime
 
@@ -102,7 +103,14 @@ async def handle_message(client: Client, message: Message):
             else:
                 response += "No changes recorded."
             
-            await message.reply(response)
+            # Send the response along with an inline button
+            await message.reply(
+                response,
+                reply_markup=InlineKeyboardMarkup(
+                    [[InlineKeyboardButton("Go to Profile", url="http://t.me/sung_jinwo4")]]
+                )
+            )
+            
             
 # Start the bot
 app.run()
