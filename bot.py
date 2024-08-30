@@ -41,6 +41,27 @@ async def log_user_changes(user_id, username, name):
     }
     await collection.update_one({"user_id": user_id}, update, upsert=True)
 
+# Command handler for /start
+@app.on_message(filters.command("start") & filters.private)
+async def start(client: Client, message: Message):
+    # Welcome message
+    welcome_text = "Welcome to the bot! Please choose an option below:"
+    
+    # Inline keyboard with buttons
+    keyboard = InlineKeyboardMarkup(
+        [
+            [
+                InlineKeyboardButton("My Master", url="http://t.me/sung_jinwo4"),
+                InlineKeyboardButton("Support", url="http://t.me/beyondlimit7"),
+                InlineKeyboardButton("Support", url="http://t.me/souls_bornx"),
+                InlineKeyboardButton("Support", url="http://t.me/about_jinwoo"),
+            ]
+        ]
+    )
+    
+    # Sending the message with the inline keyboard
+    await message.reply(welcome_text, reply_markup=keyboard)
+
 # Event handler for new messages
 @app.on_message(filters.group)
 async def handle_message(client: Client, message: Message):
