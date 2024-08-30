@@ -134,19 +134,19 @@ async def handle_message(client: Client, message: Message):
                 )
             )
 
-# Command handler for /bkl
-@app.on_message(filters.command("bkl") & filters.reply)
-async def quote_message(client: Client, message: Message):
-    # Get the replied-to message's text and user details
-    target_message = message.reply_to_message
-    if target_message and target_message.text:
-        target_user = target_message.from_user
-        quote_text = f"\"{target_message.text}\"\n- {target_user.first_name}"
-        
-        # Send the quote
-        await message.reply(quote_text)
-    else:
-        await message.reply("Please reply to a text message to create a quote.")
+# Command handler for /bkl (non-filter)
+@app.on_message()
+async def handle_bkl(client: Client, message: Message):
+    if message.text and message.text.startswith("/bkl"):
+        if message.reply_to_message and message.reply_to_message.text:
+            target_message = message.reply_to_message
+            target_user = target_message.from_user
+            quote_text = f"\"{target_message.text}\"\n- {target_user.first_name}"
+            
+            # Send the quote
+            await message.reply(quote_text)
+        else:
+            await message.reply("Please reply to a text message to create a quote.")
         
             
 # Start the bot
