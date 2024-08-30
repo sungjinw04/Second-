@@ -59,8 +59,8 @@ async def handle_message(client: Client, message: Message):
         await log_user_changes(user_id, username, name)
 
 # Command handler to fetch change history
-@app.on_message(def non_command_filter(rape):
-    return not message.text.startswith('/'))
+@app.on_message def non_command_filter(rape):
+    return not message.text.startswith('/')
 filters.create(non_command_filter)
 async def handle_rape_command(client: Client, message: Message):
     user_id = message.from_user.id
