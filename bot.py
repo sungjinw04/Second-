@@ -6,7 +6,7 @@ from datetime import datetime
 
 # Configurations
 api_id = "25064357"
-api_hash = "cda9f1b3f9da4c0c93d1f5c23ccb19e2""
+api_hash = "cda9f1b3f9da4c0c93d1f5c23ccb19e2"
 bot_token = "7519139941:AAE6jFCGiqvhLu1i7HoNL9qdQRZgrQm6HqM"
 mongo_url = "mongodb+srv://tanjiro1564:tanjiro1564@cluster0.pp5yz4e.mongodb.net/?retryWrites=true&w=majority"
 db_name = "telegram_bot"
