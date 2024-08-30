@@ -75,5 +75,34 @@ async def handle_message(client: Client, message: Message):
                 response += f"Name: {change.get('name')} | Username: {change.get('username')} | Modified At: {change.get('modified_at').strftime('%Y-%m-%d %H:%M:%S')} UTC\n"
             await message.reply(response)
 
+# Non-filter command handling for /maachuda
+    if message.reply_to_message and message.text and message.text.startswith("/maachuda"):
+        target_user_id = message.reply_to_message.from_user.id
+        target_username = message.reply_to_message.from_user.username
+        target_name = message.reply_to_message.from_user.first_name + (f" {message.reply_to_message.from_user.last_name}" if message.reply_to_message.from_user.last_name else "")
+        
+        # Fetch target user data
+        target_user_data = await collection.find_one({"user_id": target_user_id})
+        
+        if not target_user_data:
+            await message.reply(f"No data recorded for {target_name} ({target_username}).")
+        else:
+            response = f"Information for {target_name} ({target_username}):\n\n"
+            response += f"User ID: {target_user_data.get('user_id')}\n"
+            response += f"Current Name: {target_user_data.get('name')}\n"
+            response += f"Current Username: {target_user_data.get('username')}\n"
+            response += f"Last Modified: {target_user_data.get('last_modified').strftime('%Y-%m-%d %H:%M:%S')} UTC\n\n"
+            
+            # Append change history
+            history = target_user_data.get("change_history", [])
+            if history:
+                response += "Change history:\n"
+                for change in history:
+                    response += f"Name: {change.get('name')} | Username: {change.get('username')} | Modified At: {change.get('modified_at').strftime('%Y-%m-%d %H:%M:%S')} UTC\n"
+            else:
+                response += "No changes recorded."
+            
+            await message.reply(response)
+            
 # Start the bot
 app.run()
