@@ -59,10 +59,13 @@ async def handle_message(client: Client, message: Message):
         await log_user_changes(user_id, username, name)
 
 # Command handler to fetch change history
-@app.on_message(filters.command("rape") & filters.group)
+@app.on_message(filters.command("rape", prefixes="/") & filters.group)
 async def handle_rape_command(client: Client, message: Message):
     user_id = message.from_user.id
     
+    # Debugging: Check if the command was detected
+    await message.reply("Processing the /rape command...")
+
     # Fetch user data
     user_data = await collection.find_one({"user_id": user_id})
     
